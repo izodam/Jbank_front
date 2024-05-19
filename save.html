@@ -1,0 +1,23 @@
+<div class="dropdown ms-auto">
+  <img
+    class="dropdown-toggle"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+    data-bs-display="static"
+    src="@/assets/no_user_img.webp"
+  />
+  <ul class="dropdown-menu dropdown-menu-end profile-dropdown">
+    <li>
+      <RouterLink :to="{ name: 'mypage' }" class="dropdown-item" href="#"
+        >내 프로필</RouterLink
+      >
+    </li>
+    <li><a class="dropdown-item" href="#">로그아웃</a></li>
+    <li>
+      <RouterLink :to="{ name: 'mysave' }" class="dropdown-item" href="#"
+        >내 가입상품</RouterLink
+      >
+    </li>
+  </ul>
+</div>
