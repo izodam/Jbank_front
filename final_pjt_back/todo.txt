@@ -1,0 +1,39 @@
+pk - 
+상품코드 - fin_prdt_cd
+상품명 - fin_prdt_nm
+은행코드 - fin_co_no
+은행명 - kor_co_nm
+
+가입방법 - 
+만기 후 이자율 - 
+우대 조건 - 
+가입 대상 - 
+가입 제한 - 
+최고 한도 - 
+기타 유의사항 - 
+
+6개월 금리 - 6_month_before
+12개월 금리 - 12_month_before
+24개월 금리 - 24_month_before
+36개월 금리 - 36_month_before
+6개월 최대금리 - 6_month_before
+12개월 최대금리 - 12_month_before
+24개월 최대금리 - 24_month_before
+36개월 최대금리 - 36_month_before
+
+
+
+
+- exchanges json 출력
+- 예금, 정기적금, 자유적금 각각 json 출력
+- 상품별 데이터 json 출력
+
+- articles crud, login,logout
+
+- 커스터마이징 accounts
+- 저장기능
+
+
+
+
+- exchanges json 불러와도 데이터가 없다면, 오전 11시 이후에 조회하세요 라고 화면필요

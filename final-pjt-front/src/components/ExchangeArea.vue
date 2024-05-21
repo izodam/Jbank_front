@@ -24,6 +24,7 @@
                 v-model="beforeAmount"
                 placeholder="금액을 입력하세요"
               />
+              <p>{{ beforeCurrency }}</p>
             </div>
           </div>
         </div>
@@ -76,35 +77,48 @@ const afterCountry = ref("미국");
 const afterAmout = ref(0);
 
 const currency = ref("");
+const beforeCurrency = ref("");
 
 const calculateExchange = function () {
-  const before = ref(null);
-  const after = ref(null);
-  exchange.forEach((element) => {
-    if (element.cur_nm.split(" ")[0] === beforeCountry.value) {
-      before.value = parseFloat(element.tts.replace(/,/g, ""));
-      if (element.cur_unit.includes("100")) {
-        before.value /= 100;
-      }
-    }
-    if (element.cur_nm.split(" ")[0] === afterCountry.value) {
-      after.value = parseFloat(element.ttb.replace(/,/g, ""));
-      if (element.cur_unit.includes("100")) {
-        after.value /= 100;
-      }
-      currency.value = element.cur_nm.split(" ")[1];
-    }
-  });
-  if (before.value === 0) {
-    afterAmout.value =
-      Math.round((beforeAmount.value / after.value) * 100) / 100;
-  } else if (after.value === 0) {
-    console.log(before.value);
-    afterAmout.value =
-      Math.round(beforeAmount.value * before.value * 100) / 100;
+  if (beforeAmount.value <= 0) {
+    window.alert("값을 다시 확인하세요!!");
   } else {
-    const rate = before.value / after.value;
-    afterAmout.value = Math.round(rate * beforeAmount.value * 100) / 100;
+    const before = ref(null);
+    const after = ref(null);
+    exchange.forEach((element) => {
+      if (element.cur_nm.split(" ")[0] === beforeCountry.value) {
+        before.value = parseFloat(element.tts.replace(/,/g, ""));
+        if (element.cur_unit.includes("100")) {
+          before.value /= 100;
+        }
+        beforeCurrency.value = element.cur_nm.split(" ")[1];
+        if (!beforeCurrency.value) {
+          beforeCurrency.value = element.cur_nm.split(" ")[0];
+        }
+      }
+      if (element.cur_nm.split(" ")[0] === afterCountry.value) {
+        after.value = parseFloat(element.ttb.replace(/,/g, ""));
+        if (element.cur_unit.includes("100")) {
+          after.value /= 100;
+        }
+        currency.value = element.cur_nm.split(" ")[1];
+        console.log(currency.value);
+        if (!currency.value) {
+          currency.value = element.cur_nm.split(" ")[0];
+        }
+      }
+    });
+    if (before.value === 0) {
+      afterAmout.value =
+        Math.round((beforeAmount.value / after.value) * 100) / 100;
+    } else if (after.value === 0) {
+      console.log(before.value);
+      afterAmout.value =
+        Math.round(beforeAmount.value * before.value * 100) / 100;
+    } else {
+      const rate = before.value / after.value;
+      afterAmout.value = Math.round(rate * beforeAmount.value * 100) / 100;
+    }
   }
 };
 

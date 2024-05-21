@@ -27,7 +27,14 @@
               자유적금
             </RouterLink>
           </li>
-          <li class="nav-item align-self-end mx-2"></li>
+          <li class="nav-item align-self-end mx-2">
+            <RouterLink
+              class="nav-link link-body-emphasis link-offset-2"
+              :to="{ name: 'recommend' }"
+            >
+              상품 추천받기
+            </RouterLink>
+          </li>
         </ul>
       </div>
     </nav>
@@ -41,6 +48,6 @@ import { RouterLink, RouterView } from "vue-router";
 
 <style scoped>
 .navbar {
-  background-color: #efefed;
+  background-color: #e6e6e3;
 }
 </style>
