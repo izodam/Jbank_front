@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <button class="btn mb-3 ps-0" @click="goToBack">
+    <button class="btn mb-3 ps-0 back-btn" @click="goToBack">
       <span class="material-symbols-outlined">arrow_back</span>
     </button>
   </div>
@@ -216,6 +216,9 @@ const changeCancle = function () {
   background-color: #ac4747;
   color: white;
   border-color: #ac4747;
+}
 
+.back-btn {
+  border: 0px;
 }
 </style>

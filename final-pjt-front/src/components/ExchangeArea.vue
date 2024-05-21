@@ -1,6 +1,6 @@
 <template>
   <div class="d-md-grid gap-2 col-md-8 mx-auto">
-    <h2 class="text-center mb-4">환전 계산기</h2>
+    <h2 class="text-center mb-4">환율 계산</h2>
     <div class="row div-card">
       <!-- 왼쪽 카드 -->
       <div class="col-md-6 mb-5">
@@ -24,7 +24,7 @@
                 v-model="beforeAmount"
                 placeholder="금액을 입력하세요"
               />
-              <p>{{ beforeCurrency }}</p>
+              <!-- <p>{{ beforeCurrency }}</p> -->
             </div>
           </div>
         </div>

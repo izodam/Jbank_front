@@ -3,7 +3,10 @@
     <h1 class="text-center mb-4" v-if="userStore.myProduct">
       {{ userStore.myProduct.user.username }}님의 가입 상품
     </h1>
-    <table v-if="userStore.myProduct" class="table table-hover">
+    <table
+      v-if="userStore.myProduct.products.length !== 0"
+      class="table table-hover"
+    >
       <thead class="table-light">
         <tr>
           <th scope="col"></th>
@@ -21,7 +24,7 @@
           <td>{{ idx + 1 }}</td>
           <td>{{ product.fin_prdt_nm }}</td>
           <td>{{ savingOrDeposit[product.prdt_type] }}</td>
-          <td class="text-end">%</td>
+          <td class="text-end">{{ product.max_after }} %</td>
           <td class="text-end">
             <button
               class="btn btn-outline-danger btn-sm btn-sm"
