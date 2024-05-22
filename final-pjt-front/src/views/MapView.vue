@@ -1,102 +1,129 @@
 <template>
-  <div class="container mt-4">
-    <h1 class="mb-4 text-center">은행 지점 검색</h1>
-    <div class="search-form-container mb-4">
-      <form
-        @submit.prevent="searchPlaces"
-        class="p-4 bg-light rounded shadow-sm"
-      >
-        <div class="mb-3">
-          <label for="province" class="form-label">도</label>
-          <select
-            v-model="selectedProvince"
-            @change="updateCities"
-            class="form-select"
-            id="province"
-          >
-            <option disabled value="">도 선택</option>
-            <option
-              v-for="(cities, province) in regions"
-              :key="province"
-              :value="province"
-            >
-              {{ province }}
-            </option>
-          </select>
-        </div>
-        <div class="mb-3" v-if="selectedProvince">
-          <label for="city" class="form-label">시</label>
-          <select v-model="selectedCity" class="form-select" id="city">
-            <option disabled value="">시 선택</option>
-            <option
-              v-for="city in regions[selectedProvince]"
-              :key="city"
-              :value="city"
-            >
-              {{ city }}
-            </option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="bank" class="form-label">은행명</label>
-          <select v-model="selectedBank" class="form-select" id="bank">
-            <option disabled value="">은행 선택</option>
-            <option v-for="bank in banks" :key="bank" :value="bank">
-              {{ bank }}
-            </option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">검색</button>
-      </form>
+  <div class="container-fluid mt-4">
+    <div class="text-center my-4">
+      <h3>주변 은행 검색</h3>
     </div>
     <div class="row">
-      <div class="col-md-8">
-        <KakaoMap
-          :lat="37.566826"
-          :lng="126.9786567"
-          :level="5"
-          @onLoadKakaoMap="onLoadKakaoMap"
-          style="width: 100%; height: 500px"
-        >
-          <KakaoMapMarker
-            v-for="(marker, index) in markerList"
-            :key="index"
-            :lat="marker.lat"
-            :lng="marker.lng"
-            :infoWindow="marker.infoWindow"
-            :clickable="true"
-            @onClickKakaoMapMarker="() => onClickMapMarker(marker)"
-          />
-        </KakaoMap>
-      </div>
-      <div class="col-md-4">
+      <!-- 검색창 -->
+      <div
+        :class="[
+          'col-md-3',
+          'search-form-wrapper',
+          { expanded: isSearchFormOpen },
+        ]"
+      >
         <div
-          class="result-list p-3 bg-light rounded shadow-sm"
-          style="height: 500px; overflow-y: auto"
+          class="search-form-container sticky-top p-4 bg-light rounded shadow-sm"
         >
-          <h5 class="mb-3">검색 결과</h5>
-          <ul class="list-group">
-            <li
-              v-for="(marker, index) in markerList"
-              :key="index"
-              class="list-group-item"
-              @click="highlightMarker(marker)"
+          <button
+            class="btn btn-secondary w-100 mb-3 toggle-btn"
+            @click="toggleSearchForm"
+          >
+            {{ isSearchFormOpen ? "검색창 닫기" : "검색창 열기" }}
+          </button>
+          <transition name="slide-fade">
+            <form v-if="isSearchFormOpen" @submit.prevent="searchPlaces">
+              <div class="mb-3">
+                <label for="province" class="form-label">도</label>
+                <select
+                  v-model="selectedProvince"
+                  @change="updateCities"
+                  class="form-select"
+                  id="province"
+                >
+                  <option disabled value="">도 선택</option>
+                  <option
+                    v-for="(cities, province) in regions"
+                    :key="province"
+                    :value="province"
+                  >
+                    {{ province }}
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3" v-if="selectedProvince">
+                <label for="city" class="form-label">시</label>
+                <select v-model="selectedCity" class="form-select" id="city">
+                  <option disabled value="">시 선택</option>
+                  <option
+                    v-for="city in regions[selectedProvince]"
+                    :key="city"
+                    :value="city"
+                  >
+                    {{ city }}
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="bank" class="form-label">은행명</label>
+                <select v-model="selectedBank" class="form-select" id="bank">
+                  <option disabled value="">은행 선택</option>
+                  <option v-for="bank in banks" :key="bank" :value="bank">
+                    {{ bank }}
+                  </option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary w-100 search-btn">
+                검색
+              </button>
+            </form>
+          </transition>
+        </div>
+      </div>
+      <!-- 지도와 검색 결과 -->
+      <div
+        :class="['col-md-9', 'content-wrapper', { expanded: isSearchFormOpen }]"
+      >
+        <div class="row">
+          <div class="col-md-8 col-xl-10">
+            <KakaoMap
+              :lat="37.566826"
+              :lng="126.9786567"
+              :level="5"
+              @onLoadKakaoMap="onLoadKakaoMap"
+              style="width: 100%; height: 500px"
             >
-              <strong>{{ marker.infoWindow.content }}</strong
-              ><br />
-              <small>{{ marker.address }}</small>
-            </li>
-          </ul>
+              <KakaoMapMarker
+                v-for="(marker, index) in markerList"
+                :key="index"
+                :lat="marker.lat"
+                :lng="marker.lng"
+                :infoWindow="marker.infoWindow"
+                :clickable="true"
+                @onClickKakaoMapMarker="() => onClickMapMarker(marker)"
+              />
+            </KakaoMap>
+          </div>
+          <div class="col-md-4 col-xl-2">
+            <div
+              class="result-list p-3 bg-light rounded shadow-sm"
+              style="height: 500px; overflow-y: auto"
+            >
+              <h5 class="mb-3">검색 결과</h5>
+              <ul class="list-group">
+                <li
+                  v-for="(marker, index) in markerList"
+                  :key="index"
+                  class="list-group-item"
+                  @click="highlightMarker(marker)"
+                >
+                  <strong>{{ marker.infoWindow.content }}</strong
+                  ><br />
+                  <small>{{ marker.address }}</small>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref } from "vue";
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 
+const isSearchFormOpen = ref(true);
 // 도와 시, 은행명을 포함한 데이터
 const regions = {
   서울특별시: [
@@ -343,44 +370,36 @@ const regions = {
   제주특별자치도: ["제주시", "서귀포시"],
 };
 
-const banks = [
-  "국민은행",
-  "신한은행",
-  "우리은행",
-  "하나은행",
-  "농협은행",
-  "기업은행",
-];
+const banks = ["국민은행", "신한은행", "우리은행", "하나은행", "농협은행"];
 
+const map = ref(null);
+const markerList = ref([]);
 const selectedProvince = ref("");
 const selectedCity = ref("");
 const selectedBank = ref("");
-const map = ref(null);
-const markerList = ref([]);
-
-const updateCities = () => {
-  selectedCity.value = "";
-};
+const selectedMarker = ref(null);
 
 const onLoadKakaoMap = (mapRef) => {
   map.value = mapRef;
 };
 
 const searchPlaces = () => {
-  const keyword = `${selectedProvince.value} ${selectedCity.value} ${selectedBank.value}`;
+  if (!selectedProvince.value || !selectedCity.value || !selectedBank.value) {
+    alert("모든 항목을 선택해 주세요.");
+    return;
+  }
+  const query = `${selectedProvince.value} ${selectedCity.value} ${selectedBank.value}`;
   const ps = new kakao.maps.services.Places();
-
-  ps.keywordSearch(keyword, placesSearchCB);
+  ps.keywordSearch(query, placesSearchCB);
 };
 
 const placesSearchCB = (data, status) => {
   if (status === kakao.maps.services.Status.OK) {
     const bounds = new kakao.maps.LatLngBounds();
-
-    markerList.value = []; // 기존 마커 초기화
+    markerList.value = [];
 
     data.forEach((place) => {
-      const markerItem = {
+      const marker = {
         lat: place.y,
         lng: place.x,
         infoWindow: {
@@ -389,78 +408,89 @@ const placesSearchCB = (data, status) => {
         },
         address: place.road_address_name || place.address_name,
       };
-      markerList.value.push(markerItem);
+      markerList.value.push(marker);
       bounds.extend(new kakao.maps.LatLng(Number(place.y), Number(place.x)));
     });
 
-    map.value.setBounds(bounds);
+    map.value?.setBounds(bounds);
   } else {
     alert("검색 결과가 없습니다.");
   }
 };
 
-const onClickMapMarker = (markerItem) => {
-  markerItem.infoWindow.visible = !markerItem.infoWindow.visible;
+const highlightMarker = (marker) => {
+  // 기존 선택된 마커의 오버레이를 숨깁니다.
+  if (selectedMarker.value) {
+    selectedMarker.value.infoWindow.visible = false;
+  }
+
+  // 새로 선택된 마커의 오버레이를 표시합니다.
+  marker.infoWindow.visible = true;
+  selectedMarker.value = marker;
+
+  // 선택된 마커 위치로 지도를 이동합니다.
+  map.value.setCenter(new kakao.maps.LatLng(marker.lat, marker.lng));
 };
 
-const highlightMarker = (marker) => {
-  const position = new kakao.maps.LatLng(
-    Number(marker.lat),
-    Number(marker.lng)
-  );
-  map.value.setCenter(position);
-  marker.infoWindow.visible = true;
+const onClickMapMarker = (marker) => {
+  highlightMarker(marker);
+};
+
+const updateCities = () => {
+  selectedCity.value = "";
+};
+
+const toggleSearchForm = () => {
+  isSearchFormOpen.value = !isSearchFormOpen.value;
 };
 </script>
 
-<style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
+<style>
+.search-form-wrapper {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.search-form-wrapper {
+  width: 120px; /* initial collapsed width */
+}
+
+.search-form-wrapper.expanded {
+  width: 300px; /* expanded width */
 }
 
 .search-form-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  position: sticky;
+  top: 20px;
+  z-index: 1000;
+  transition: all 0.3s ease;
 }
 
-.search-form-container h2 {
-  font-family: "Arial", sans-serif;
-  font-weight: bold;
-  color: #333;
+.content-wrapper {
+  transition: all 0.3s ease;
+  width: calc(
+    100% - 120px
+  ); /* initial width adjusted for collapsed search form */
 }
 
-.form-label {
-  font-weight: bold;
-  color: #555;
+.content-wrapper.expanded {
+  width: calc(100% - 300px); /* width adjusted for expanded search form */
 }
 
-.form-select {
-  border: 2px solid #ced4da;
-  border-radius: 0.25rem;
-  font-size: 1rem;
-  padding: 0.5rem;
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
 }
 
-.form-select:focus {
-  border-color: #80bdff;
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  max-height: 0;
+  opacity: 0;
 }
 
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-  font-size: 1.1rem;
-  font-weight: bold;
-  padding: 0.75rem;
-  transition: background-color 0.3s, border-color 0.3s;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #004085;
+.result-list {
+  height: 500px;
+  overflow-y: auto;
 }
 
 .list-group-item {
@@ -468,20 +498,27 @@ const highlightMarker = (marker) => {
 }
 
 .list-group-item:hover {
-  background-color: #f8f9fa;
+  background-color: #f0f0f0;
 }
 
-.result-list {
-  overflow-y: auto;
+.toggle-btn {
+  background-color: #1b3074;
 }
 
-@media (max-width: 767px) {
-  .result-list {
-    height: 300px;
-  }
+.toggle-btn:hover {
+  background-color: #464555;
+  border-color: #464555;
+  /* color: black; */
+}
 
-  .row > div {
-    margin-bottom: 1rem;
-  }
+.search-btn {
+  background-color: #51606e;
+  border-color: #51606e;
+}
+
+.search-btn:hover {
+  background-color: #6a7987;
+  border-color: #6a7987;
+  /* color: black; */
 }
 </style>
