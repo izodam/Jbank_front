@@ -16,6 +16,9 @@
                 class="form-control"
                 required
               />
+              <p class="warning-message" v-if="store.wrong">
+                중복된 id입니다. 다른 id를 사용하세요.
+              </p>
             </div>
             <div class="form-group mb-3">
               <label for="password1" class="form-label">Password</label>
@@ -26,6 +29,10 @@
                 class="form-control"
                 required
               />
+              <p class="warning-message" v-if="!isValidPassword">
+                비밀번호가 너무 짧습니다. 8~16자의 영문, 숫자, 특수문자를 사용해
+                주세요.
+              </p>
             </div>
             <div class="form-group mb-4">
               <label for="password2" class="form-label">Confirm Password</label>
@@ -36,6 +43,9 @@
                 class="form-control"
                 required
               />
+              <p class="warning-message" v-if="!isValidComfirmPassword">
+                비밀번호가 일치하지 않습니다.
+              </p>
             </div>
             <button type="submit" class="btn btn-primary w-100 py-2">
               Sign Up
@@ -48,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useUserStore } from "@/stores/user";
 
 const username = ref(null);
@@ -56,6 +66,17 @@ const password1 = ref(null);
 const password2 = ref(null);
 
 const store = useUserStore();
+
+const isValidPassword = computed(() => {
+  return (
+    password1.value === null ||
+    (password1.value.length >= 8 && password1.value.length <= 16)
+  );
+});
+
+const isValidComfirmPassword = computed(() => {
+  return password2.value === null || password1.value === password2.value;
+});
 
 const signUp = function () {
   const payload = {
@@ -117,5 +138,13 @@ const signUp = function () {
 
 .btn-primary:hover {
   background-color: #0056b3;
+}
+
+.warning-message {
+  color: rgb(216, 13, 13);
+}
+
+.notshow {
+  display: none;
 }
 </style>

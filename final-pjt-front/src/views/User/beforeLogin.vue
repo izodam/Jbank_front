@@ -33,9 +33,12 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import Login from "@/components/Login.vue";
 import Signup from "@/components/Signup.vue";
+import { useUserStore } from "@/stores/user";
+
+const store = useUserStore();
 
 const isLoggedIn = ref(false);
 
@@ -43,6 +46,10 @@ const toggle = function () {
   isLoggedIn.value = !isLoggedIn.value;
   console.log(isLoggedIn.value);
 };
+
+onMounted(() => {
+  store.wrong = false;
+});
 </script>
 
 <style scoped>

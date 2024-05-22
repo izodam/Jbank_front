@@ -13,6 +13,7 @@ export const useUserStore = defineStore(
     const notUser = ref(false);
     const myProduct = ref([]);
     const nowUserName = ref("");
+    const wrong = ref(false);
 
     const isLogin = computed(() => {
       if (token.value === null) {
@@ -54,7 +55,10 @@ export const useUserStore = defineStore(
           const password = password1;
           logIn({ username, password });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          wrong.value = true;
+          console.log(err);
+        });
     };
 
     const logIn = function (payload) {
@@ -100,6 +104,7 @@ export const useUserStore = defineStore(
     return {
       nowUserName,
       token,
+      wrong,
       API_URL,
       myProduct,
       isLogin,
