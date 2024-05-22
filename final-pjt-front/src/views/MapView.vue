@@ -509,7 +509,7 @@ const toggleSearchForm = () => {
 }
 
 .toggle-btn {
-  background-color: #1b3074;
+  background-color: #777;
 }
 
 .toggle-btn:hover {

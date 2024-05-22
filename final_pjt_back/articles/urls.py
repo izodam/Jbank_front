@@ -12,7 +12,7 @@ urlpatterns = [
     # 3. DELETE : 게시글 삭제 버튼
     # 3. POST : 댓글 작성완료 버튼 ( form으로 content 작성됨 )
 
-    path('articles/<int:article_pk>/comment/<int:comment_pk>', views.comment_detail),
+    path('articles/<int:article_pk>/comment/<int:comment_pk>/', views.comment_detail),
     # 1. PUT : 댓글 수정완료 버튼 ( form으로 content 작성됨)
     # 2. DELETE : 댓글 삭제 버튼
 ]

@@ -7,6 +7,7 @@ import MapView from "../views/MapView.vue";
 import ArticleView from "../views/ArticleView.vue";
 import ArticleDetailView from "../views/Article/ArticleDetailView.vue";
 import ArticleCreateView from "../views/Article/ArticleCreateView.vue";
+import ArticleUpdateView from "../views/Article/ArticleUpdateView.vue";
 import UserInfoView from "../views/User/UserInfoView.vue";
 import MySaveView from "../views/User/MySaveView.vue";
 import DepositView from "../views/SavingCompare/DepositView.vue";
@@ -93,9 +94,14 @@ const router = createRouter({
       component: ArticleDetailView,
     },
     {
-      path: "/create",
+      path: "/articles/create",
       name: "articleCreate",
       component: ArticleCreateView,
+    },
+    {
+      path: "/articles/:id/update",
+      name: "articleUpdate",
+      component: ArticleUpdateView,
     },
 
     {

@@ -1,7 +1,7 @@
 <template>
   <div class="mt-3">
     <div class="mb-3 ms-auto">
-      <button class="btn btn-primary write-btn">
+      <button class="btn btn-light write-btn">
         <RouterLink :to="{ name: 'articleCreate' }"> 글쓰기 </RouterLink>
       </button>
     </div>
@@ -51,11 +51,12 @@ const goToDetail = function (id) {
 }
 
 .write-btn {
-  background-color: #1b3074;
+  background-color: #dad9d9;
+  border-color: #dad9d9;
 }
 
 a {
-  color: white;
+  color: black;
   text-decoration-line: none;
 }
 </style>
