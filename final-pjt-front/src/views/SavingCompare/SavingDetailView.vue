@@ -22,11 +22,11 @@
     <div class="row">
       <div class="col-2">
         <p class="mb-1">최고 금리</p>
-        <p>{{ store.savingDetail["max_after"] }}</p>
+        <p>{{ store.savingDetail["max_after"] }}%</p>
       </div>
       <div class="col-2">
         <p class="mb-1">기본 금리</p>
-        <p>{{ store.savingDetail["max_before"] }}</p>
+        <p>{{ store.savingDetail["max_before"] }}%</p>
       </div>
     </div>
     <hr />
@@ -46,10 +46,20 @@
         </div>
       </div>
       <div class="mt-3" v-if="selectedMonth">
-        <h3>{{ buttons[selectedMonth] }} 후 금액</h3>
-        <p>{{ store.savingDetail[selectedMonth] }}%</p>
-        <p>1000만원 기준</p>
-        <p>세후 이자 {{ store.money.toLocaleString("ko-KR") }}원</p>
+        <h5>{{ buttons[selectedMonth] }} 후, </h5>
+        <p>최고 우대 금리 {{ store.savingDetail[selectedMonth] }}%</p>
+        <div v-if="!isToggle">
+          <p>{{ standardMoney.toLocaleString("ko-KR") }}원 기준 <br>세후 이자 {{ store.money.toLocaleString("ko-KR") }}원</p>
+          <button class="btn btn-dark" @click="setStandard">가격 설정</button>
+        </div>
+        <div v-else>
+          <form @submit.prevent="submitStandard">
+            <div class="row">
+              <div class="col-10"><input class="form-control" type="number" v-model="standardMoney"></div>
+              <div class="col-2"><button class="btn btn-dark col-auto" type="submit">설정</button></div>
+            </div>
+          </form>
+        </div>
       </div>
       <div v-else>
         <p>개월수를 선택해주세요</p>
@@ -77,6 +87,9 @@ const userStore = useUserStore()
 const route = useRoute();
 const router = useRouter()
 const fin_prdt_cd = route.params.fin_prdt_cd;
+const standardMoney = ref(10000000)
+const isToggle = ref(false)
+const nowMonth = ref(0)
 
 const buttons = {
   "1month_after": "1개월",
@@ -86,6 +99,20 @@ const buttons = {
   "24month_after": "24개월",
   "36month_after": "36개월",
 };
+
+const setStandard = function () {
+  isToggle.value = true
+}
+
+const submitStandard = function () {
+  isToggle.value = false
+  store.money =
+    parseInt(standardMoney.value) *
+    store.savingDetail[selectedMonth.value] *
+    0.01 *
+    0.846 *
+    (nowMonth.value / 12);
+}
 
 const formattedInterestRate = computed(() => {
   const interestRate = store.savingDetail["mtrt_int"];
@@ -104,10 +131,11 @@ const selectMonth = function (label) {
   const regex = /[^0-9]/g;
   const res = label.replace(regex, "");
   const month = parseInt(res);
+  nowMonth.value = parseInt(res)
 
   selectedMonth.value = label;
   store.money =
-    10000000 *
+    parseInt(standardMoney.value) *
     store.savingDetail[selectedMonth.value] *
     0.01 *
     0.846 *

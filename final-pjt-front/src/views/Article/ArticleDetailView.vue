@@ -6,7 +6,7 @@
     <div class="header" v-if="store.articleDetail.length !== 0">
       <h3>{{ store.articleDetail.article.title }}</h3>
       <button
-        v-if="store.articleDetail.article.user == userStore.nowUserName"
+        v-if="store.articleDetail.article.nickname == userStore.nowUserName"
         @click="updateArticle"
         class="btn btn-primary update-btn"
       >
@@ -15,7 +15,7 @@
     </div>
     <div v-if="store.articleDetail.length !== 0" class="article-details pt-0">
       <p class="meta">
-        <span class="author">{{ store.articleDetail.article.user }}</span>
+        <span class="author">{{ store.articleDetail.article.nickname }}</span>
         <span class="date">{{
           store.articleDetail.article.created_at.substring(0, 10)
         }}</span>
@@ -31,9 +31,9 @@
           >
             <div v-if="editingCommentId !== comment.id" class="">
               <div class="comment-content w-100">
-                <h5>{{ comment.user }}</h5>
+                <h5>{{ comment.nickname }}</h5>
                 <i
-                  v-if="comment.user == userStore.nowUserName"
+                  v-if="comment.nickname == userStore.nowUserName"
                   @click="toggleOptions(comment.id)"
                   class="options-toggle fas fa-ellipsis-h ms-auto"
                 ></i>

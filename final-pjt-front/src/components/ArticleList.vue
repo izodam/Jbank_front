@@ -22,7 +22,7 @@
         >
           <th scope="row">{{ idx + 1 }}</th>
           <td>{{ article.title }}</td>
-          <td class="text-end">{{ article.user }}</td>
+          <td class="text-end">{{ article.nickname }}</td>
           <td class="text-end created-at">
             {{ article.created_at.substring(0, 10) }}
           </td>
