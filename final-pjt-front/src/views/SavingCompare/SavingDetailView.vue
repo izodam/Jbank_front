@@ -136,7 +136,7 @@ const changeJoin = function() {
     })
     .then(res => {
       console.log(res.data)
-      store.findSavingDetail(fin_prdt_cd);
+      store.findSavingDetail(fin_prdt_cd, userStore.token);
     }) 
     .catch(err => console.log(err))
   }
@@ -154,7 +154,7 @@ const changeCancle = function () {
     headers: {'Authorization': `Token ${userStore.token}`},
   })
   .then(res => {
-    store.findSavingDetail(fin_prdt_cd);
+    store.findSavingDetail(fin_prdt_cd, userStore.token);
   }) 
   .catch(err => console.log(err))}
 }
