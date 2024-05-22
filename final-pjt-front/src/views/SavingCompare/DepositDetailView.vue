@@ -115,7 +115,7 @@ const selectMonth = function (label) {
 };
 
 onMounted(() => {
-  store.findDetail(fin_prdt_cd);
+  store.findDetail(fin_prdt_cd, userStore.token);
 });
 
 const goToBack = function () {

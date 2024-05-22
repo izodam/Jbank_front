@@ -123,7 +123,7 @@
 import { ref } from "vue";
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 
-const isSearchFormOpen = ref(true);
+const isSearchFormOpen = ref(false);
 // 도와 시, 은행명을 포함한 데이터
 const regions = {
   서울특별시: [

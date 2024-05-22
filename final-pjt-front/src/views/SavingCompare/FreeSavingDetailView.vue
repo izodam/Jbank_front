@@ -116,7 +116,7 @@ const selectMonth = function (label) {
 };
 
 onMounted(() => {
-  store.findFreeSavingDetail(fin_prdt_cd);
+  store.findFreeSavingDetail(fin_prdt_cd, userStore.token);
 });
 
 const goToBack = function () {
