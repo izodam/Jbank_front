@@ -1,24 +1,31 @@
 <template>
-  <div class="mt-5">
+  <div class="mt-3">
+    <div class="mb-3 ms-auto">
+      <button class="btn btn-primary write-btn">
+        <RouterLink :to="{ name: 'articleCreate' }"> 글쓰기 </RouterLink>
+      </button>
+    </div>
     <table class="table table-hover">
       <thead>
         <tr>
           <th scope="col">No.</th>
           <th scope="col">제목</th>
-          <th scope="col">글쓴이</th>
-          <th scope="col">작성시간</th>
+          <th scope="col" class="text-end">글쓴이</th>
+          <th scope="col" class="text-end">작성날짜</th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="article in store.articles"
+          v-for="(article, idx) in store.articles"
           :key="article.id"
           @click="goToDetail(article.id)"
         >
-          <th scope="row">{{ article.id }}</th>
+          <th scope="row">{{ idx + 1 }}</th>
           <td>{{ article.title }}</td>
-          <td>{{ article.user }}</td>
-          <td>{{ article.created_at }}</td>
+          <td class="text-end">{{ article.user }}</td>
+          <td class="text-end created-at">
+            {{ article.created_at.substring(0, 10) }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -37,4 +44,18 @@ const goToDetail = function (id) {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.created-at {
+  color: gray;
+  font-size: small;
+}
+
+.write-btn {
+  background-color: #1b3074;
+}
+
+a {
+  color: white;
+  text-decoration-line: none;
+}
+</style>

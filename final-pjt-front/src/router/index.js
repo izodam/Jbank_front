@@ -5,7 +5,8 @@ import CompareSavingView from "../views/CompareSavingView.vue";
 import ExchangeView from "../views/ExchangeView.vue";
 import MapView from "../views/MapView.vue";
 import ArticleView from "../views/ArticleView.vue";
-import ArticleDetailView from "../views/ArticleDetailView.vue";
+import ArticleDetailView from "../views/Article/ArticleDetailView.vue";
+import ArticleCreateView from "../views/Article/ArticleCreateView.vue";
 import UserInfoView from "../views/User/UserInfoView.vue";
 import MySaveView from "../views/User/MySaveView.vue";
 import DepositView from "../views/SavingCompare/DepositView.vue";
@@ -25,6 +26,7 @@ const router = createRouter({
       name: "home",
       component: HomeView,
     },
+
     {
       path: "/compareSaving",
       name: "compareSaving",
@@ -67,16 +69,19 @@ const router = createRouter({
         },
       ],
     },
+
     {
       path: "/exchange",
       name: "exchange",
       component: ExchangeView,
     },
+
     {
       path: "/map",
       name: "map",
       component: MapView,
     },
+
     {
       path: "/articles",
       name: "article",
@@ -87,6 +92,12 @@ const router = createRouter({
       name: "articleDetail",
       component: ArticleDetailView,
     },
+    {
+      path: "/create",
+      name: "articleCreate",
+      component: ArticleCreateView,
+    },
+
     {
       path: "/mypage",
       name: "mypage",

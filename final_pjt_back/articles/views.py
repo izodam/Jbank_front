@@ -11,14 +11,14 @@ from .models import Article, Comment
 @permission_classes([IsAuthenticated])
 def article_list(request):
     if request.method == 'GET':
-        articles = get_list_or_404(Article)
+        articles = Article.objects.all()
         serializer = ArticleSerializer(articles, many=True)
         return Response(serializer.data)
     
     elif request.method == 'POST':
         serializer = ArticleSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(author=request.user)
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -38,7 +38,7 @@ def article_detail(request, article_pk):
         })
     
     elif request.method == 'PUT':
-        if article.author != request.user:
+        if article.user != request.user:
             return Response({'detail': 'Permission denied.'}, status=status.HTTP_403_FORBIDDEN)
         serializer = ArticleSerializer(article, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -46,7 +46,7 @@ def article_detail(request, article_pk):
             return Response(serializer.data)
     
     elif request.method == 'DELETE':
-        if article.author != request.user:
+        if article.user != request.user:
             return Response({'detail': 'Permission denied.'}, status=status.HTTP_403_FORBIDDEN)
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -56,7 +56,7 @@ def article_detail(request, article_pk):
         data['article'] = article_pk
         serializer = CommentSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(author=request.user)
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
 
@@ -66,7 +66,7 @@ def comment_detail(request, article_pk, comment_pk):
     comment = get_object_or_404(Comment, article_id=article_pk, pk=comment_pk)
 
     if request.method == 'PUT':
-        if comment.author != request.user:
+        if comment.user != request.user:
             return Response({'detail': 'Permission denied.'}, status=status.HTTP_403_FORBIDDEN)
         serializer = CommentSerializer(comment, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -74,7 +74,7 @@ def comment_detail(request, article_pk, comment_pk):
             return Response(serializer.data)
     
     elif request.method == 'DELETE':
-        if comment.author != request.user:
+        if comment.user != request.user:
             return Response({'detail': 'Permission denied.'}, status=status.HTTP_403_FORBIDDEN)
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
