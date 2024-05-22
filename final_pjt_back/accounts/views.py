@@ -54,6 +54,12 @@ def cancel_product(request):
     return Response({'detail': f'Cancelled {prdt_type} product successfully.'}, status=status.HTTP_200_OK)
 
 
+# accounts_views.py
+from .serializers import generate_combined_chart
+
+# accounts_views.py
+from .serializers import generate_combined_chart
+
 @api_view(['GET'])
 def user_profile(request):
     user = request.user
@@ -64,10 +70,15 @@ def user_profile(request):
     product_serializer = ProductSerializer(products, many=True)
     user_serializer = UserSerializer(user)
 
+    chart_base64 = generate_combined_chart(product_serializer.data)
+
     return Response({
         'user': user_serializer.data,
         'products': product_serializer.data,
+        'chart': chart_base64
     })
+
+
 
 @api_view(['PUT'])
 def update(request):

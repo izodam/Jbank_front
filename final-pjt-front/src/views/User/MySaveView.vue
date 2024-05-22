@@ -57,6 +57,15 @@
         </tr>
       </tbody>
     </table>
+    <div v-if="userStore.myProduct.chart" class="card mt-5 custom-card">
+      <div class="card-header fw-bold">금리 비교</div>
+      <!-- <h3>가입한 상품 금리</h3> -->
+      <img
+        :src="'data:image/png;base64,' + userStore.myProduct.chart"
+        alt="chart"
+        class="card-body"
+      />
+    </div>
   </div>
 </template>
 
@@ -102,7 +111,15 @@ const cancelSubscription = function (product) {
 };
 
 onMounted(() => {
-  userStore.findMyProduct();
+  axios({
+    method: "get",
+    url: `${userStore.API_URL}/accounts/profile/`,
+    headers: { Authorization: `Token ${userStore.token}` },
+  })
+    .then((res) => {
+      userStore.myProduct = res.data;
+    })
+    .catch((err) => console.log(err));
 });
 </script>
 
@@ -141,5 +158,20 @@ onMounted(() => {
 .btn-outline-danger:hover {
   background-color: #bb243c;
   color: white;
+}
+
+img {
+  width: 100%;
+}
+
+.custom-card {
+  transition: background-color 0.3s, border-color 0.3s;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.card-header {
+  font-size: larger;
 }
 </style>
