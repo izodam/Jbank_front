@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { useKakao } from "vue3-kakao-maps/@utils";
 
-console.log(import.meta.env.VITE_appkey);
+// console.log(import.meta.env.VITE_appkey);
 import App from "./App.vue";
 import router from "./router";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";

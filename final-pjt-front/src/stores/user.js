@@ -32,6 +32,10 @@ export const useUserStore = defineStore(
         .then((res) => {
           console.log(res.data);
           myProduct.value = res.data;
+          nowUserName.value = res.data.user.nickname;
+          if (nowUserName.value === null) {
+            nowUserName.value = "Unknown";
+          }
         })
         .catch((err) => console.log(err));
     };
@@ -62,7 +66,6 @@ export const useUserStore = defineStore(
     };
 
     const logIn = function (payload) {
-      nowUserName.value = payload.username;
       const username = payload.username;
       const password = payload.password;
       axios({

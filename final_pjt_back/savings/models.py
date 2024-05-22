@@ -28,8 +28,8 @@ class DepositOptions(models.Model):
     intr_rate_type = models.TextField()                     # 저축 금리 유형
     intr_rate_type_nm = models.CharField(max_length=100)    # 저축 금리 유형명
     save_trm = models.IntegerField()                        # 저축 기간 [단위: 개월]
-    intr_rate = models.FloatField()                         # 저축 금리 [소수점 2자리]
-    intr_rate2 = models.FloatField()                        # 최고 우대금리 [소수점 2자리]
+    intr_rate = models.FloatField(null=True, blank=True)    # 저축 금리 [소수점 2자리]
+    intr_rate2 = models.FloatField(null=True, blank=True)   # 최고 우대금리 [소수점 2자리]
 
 class SavingProducts (models.Model):
     dcls_month = models.TextField()                           # 공시 제출월 [YYYYMM]
@@ -58,5 +58,5 @@ class SavingOptions(models.Model):
     rsrv_type = models.TextField()                          # 적립 유형
     rsrv_type_nm = models.TextField()                       # 적립 유형명
     save_trm = models.IntegerField()                        # 저축 기간 [단위: 개월]
-    intr_rate = models.FloatField()                         # 저축 금리 [소수점 2자리]
-    intr_rate2 = models.FloatField()                        # 최고 우대금리 [소수점 2자리]
+    intr_rate = models.FloatField(null=True, blank=True)    # 저축 금리 [소수점 2자리]
+    intr_rate2 = models.FloatField(null=True, blank=True)   # 최고 우대금리 [소수점 2자리]

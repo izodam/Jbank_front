@@ -155,12 +155,14 @@
 
 <script setup>
 import { useBankStore } from "@/stores/saving";
+import { useUserStore } from "@/stores/user";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 
 const store = useBankStore();
 const router = useRouter();
+const userStore = useUserStore();
 
 // 은행 검색 사용
 const selectedBank = ref("");
@@ -195,7 +197,17 @@ const sortByBaseInterest = function () {
 
 // detail 페이지로 이동
 const goDetailPage = function (fin_prdt_cd) {
-  router.push({ name: "depositDetail", params: { fin_prdt_cd: fin_prdt_cd } });
+  if (!userStore.isLogin) {
+    const check = confirm("로그인 후 조회 가능합니다.");
+    if (check) {
+      router.push({ name: "logIn" });
+    }
+  } else {
+    router.push({
+      name: "depositDetail",
+      params: { fin_prdt_cd: fin_prdt_cd },
+    });
+  }
 };
 </script>
 

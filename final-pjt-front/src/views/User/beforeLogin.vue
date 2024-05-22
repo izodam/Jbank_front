@@ -12,7 +12,7 @@
               name="reg-log"
               @click="toggle"
             />
-            <label for="reg-log"></label>
+            <label for="reg-log"> </label>
             <!-- <transition name="slide-fade" mode="out-in"> -->
             <div class="card-3d-wrap mx-auto mt-0">
               <div class="card-3d-wrapper">
@@ -95,8 +95,8 @@ h6 span {
   border-radius: 50%;
   color: #f1f1e6;
   background-color: #102770;
-  font-family: "unicons";
-  content: "\eb4f";
+  /* content: "\2605"; */
+  content: "\263B";
   z-index: 20;
   top: -10px;
   left: -10px;
@@ -106,7 +106,8 @@ h6 span {
   transition: all 0.5s ease;
 }
 .checkbox:checked + label:before {
-  transform: translateX(44px) rotate(-270deg);
+  transform: translateX(44px) rotate(-360deg);
+  content: "\263A";
 }
 
 .slide-fade-enter-active,

@@ -3,8 +3,6 @@
 
 from django.db import models
 
-# model, serializers 안거치고 즉시 데이터 반환으로 주석처리
-
 class ExchangeRates (models.Model):
     result = models.IntegerField()          # 조회 결과 (1 : 성공, 2 : DATA코드 오류, 3 : 인증코드 오류, 4 : 일일제한횟수 마감)
     cur_unit= models.TextField()            # 통화코드

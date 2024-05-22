@@ -5,7 +5,7 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from .models import Product
-from .serializers import UserSerializer, ProductSerializer
+from .serializers import UserSerializer, ProductSerializer, generate_combined_chart
 from savings.models import DepositProducts, SavingProducts
 
 User = get_user_model()
@@ -23,9 +23,9 @@ def join_product(request):
         return Response({'detail': 'Missing required parameters.'}, status=status.HTTP_400_BAD_REQUEST)
 
     if prdt_type == 'deposit':
-        product_data = DepositProducts.objects.get(fin_prdt_cd=fin_prdt_cd)
+        product_data = get_object_or_404(DepositProducts, fin_prdt_cd=fin_prdt_cd)
     elif prdt_type == 'saving':
-        product_data = SavingProducts.objects.get(fin_prdt_cd=fin_prdt_cd)
+        product_data = get_object_or_404(SavingProducts, fin_prdt_cd=fin_prdt_cd)
     else:
         return Response({'detail': 'Invalid product type.'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -33,10 +33,10 @@ def join_product(request):
         user=user,
         prdt_type=prdt_type,
         fin_prdt_cd=fin_prdt_cd,
-        fin_prdt_nm=product_data.fin_prdt_nm
+        fin_prdt_nm=product_data.fin_prdt_nm,
+        kor_co_nm=product_data.kor_co_nm
     )
     return Response({'detail': f'Joined {prdt_type} product successfully.'}, status=status.HTTP_200_OK)
-
 
 @api_view(['POST'])
 def cancel_product(request):
@@ -49,16 +49,10 @@ def cancel_product(request):
     if not all([prdt_type, fin_prdt_cd]):
         return Response({'detail': 'Missing required parameters.'}, status=status.HTTP_400_BAD_REQUEST)
 
-    product = Product.objects.get(user=user, prdt_type=prdt_type, fin_prdt_cd=fin_prdt_cd)
+    product = get_object_or_404(Product, user=user, prdt_type=prdt_type, fin_prdt_cd=fin_prdt_cd)
     product.delete()
     return Response({'detail': f'Cancelled {prdt_type} product successfully.'}, status=status.HTTP_200_OK)
 
-
-# accounts_views.py
-from .serializers import generate_combined_chart
-
-# accounts_views.py
-from .serializers import generate_combined_chart
 
 @api_view(['GET'])
 def user_profile(request):
@@ -77,7 +71,6 @@ def user_profile(request):
         'products': product_serializer.data,
         'chart': chart_base64
     })
-
 
 
 @api_view(['PUT'])

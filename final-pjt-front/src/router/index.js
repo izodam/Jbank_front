@@ -15,6 +15,7 @@ import DepositDetailView from "../views/SavingCompare/DepositDetailView.vue";
 import SavingDetailView from "../views/SavingCompare/SavingDetailView.vue";
 import FreeSavingDetailView from "../views/SavingCompare/FreeSavingDetailView.vue";
 import beforeLogin from "../views/User/beforeLogin.vue";
+import { useUserStore } from "../stores/user";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -107,6 +108,18 @@ const router = createRouter({
 router.beforeEach((to, from) => {
   if (to.name === "compareSaving") {
     router.push({ name: "deposit" });
+  }
+
+  const userStore = useUserStore();
+  if (to.name === "recommend") {
+    if (!userStore.isLogin) {
+      const check = confirm("로그인 후 조회 가능합니다.");
+      if (check) {
+        router.push({ name: "logIn" });
+      } else {
+        router.push(from);
+      }
+    }
   }
 });
 

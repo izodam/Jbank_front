@@ -58,12 +58,16 @@
                 <label for="bank" class="form-label">은행명</label>
                 <select v-model="selectedBank" class="form-select" id="bank">
                   <option disabled value="">은행 선택</option>
-                  <option v-for="bank in banks" :key="bank" :value="bank">
-                    {{ bank }}
+                  <option
+                    v-for="bank in store.bankList.slice(1)"
+                    :key="bank.kor_co_nm"
+                    :value="bank.kor_co_nm"
+                  >
+                    {{ bank.kor_co_nm }}
                   </option>
                 </select>
               </div>
-              <button type="submit" class="btn btn-primary w-100 search-btn">
+              <button type="submit" class="btn btn-secondary w-100 search-btn">
                 검색
               </button>
             </form>
@@ -75,7 +79,7 @@
         :class="['col-md-9', 'content-wrapper', { expanded: isSearchFormOpen }]"
       >
         <div class="row">
-          <div class="col-md-8 col-xl-10">
+          <div class="col-md-8 col-xl-9">
             <KakaoMap
               :lat="37.566826"
               :lng="126.9786567"
@@ -94,7 +98,7 @@
               />
             </KakaoMap>
           </div>
-          <div class="col-md-4 col-xl-2">
+          <div class="col-md-4 col-xl-3">
             <div
               class="result-list p-3 bg-light rounded shadow-sm"
               style="height: 500px; overflow-y: auto"
@@ -122,6 +126,9 @@
 <script setup>
 import { ref } from "vue";
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
+import { useBankStore } from "@/stores/saving";
+
+const store = useBankStore();
 
 const isSearchFormOpen = ref(false);
 // 도와 시, 은행명을 포함한 데이터

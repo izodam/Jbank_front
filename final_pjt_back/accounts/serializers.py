@@ -21,7 +21,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'age', 'salary', 'money']
+        fields = ['id', 'username', 'email', 'nickname', 'age', 'salary', 'money']
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -30,7 +30,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['user', 'prdt_type', 'fin_prdt_cd', 'fin_prdt_nm', 'max_before', 'max_after']
+        fields = ['user', 'prdt_type', 'fin_prdt_cd', 'fin_prdt_nm', 'kor_co_nm', 'max_before', 'max_after']
 
     def get_max_before(self, obj):
         if obj.prdt_type == 'deposit':

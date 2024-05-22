@@ -11,6 +11,7 @@
         <tr>
           <th scope="col"></th>
           <th scope="col">상품명</th>
+          <th scope="col">은행</th>
           <th scope="col">종류</th>
           <th scope="col" class="text-end">최대금리</th>
           <th scope="col" class="text-end"></th>
@@ -23,6 +24,7 @@
         >
           <td>{{ idx + 1 }}</td>
           <td>{{ product.fin_prdt_nm }}</td>
+          <td>{{ product.kor_co_nm }}</td>
           <td>{{ savingOrDeposit[product.prdt_type] }}</td>
           <td class="text-end">{{ product.max_after }} %</td>
           <td class="text-end">
@@ -57,7 +59,12 @@
         </tr>
       </tbody>
     </table>
-    <div v-if="userStore.myProduct.chart" class="card mt-5 custom-card">
+    <div
+      v-if="
+        userStore.myProduct.chart && userStore.myProduct.products.length !== 0
+      "
+      class="card mt-5 custom-card"
+    >
       <div class="card-header fw-bold">금리 비교</div>
       <!-- <h3>가입한 상품 금리</h3> -->
       <img
