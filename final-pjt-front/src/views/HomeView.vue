@@ -53,53 +53,7 @@
       </button>
     </div>
 
-    <div class="container mt-4">
-      <div class="row">
-        <h4 class="mb-4" v-if="userStore.myProduct">
-          놓치지 마세요! 현재 Hot한 상품
-        </h4>
-        <div class="col-5">
-          <table class="table table-hover">
-            <thead class="table-light">
-              <tr>
-                <th scope="col"></th>
-                <th scope="col" class="no-wrap">상품명</th>
-                <th scope="col" class="no-wrap">은행</th>
-                <th scope="col" class="text-end">금리</th>
-                <th scope="col" class="text-end subscriber-count">
-                  현재 가입자수
-                </th>
-                <th scope="col" class="text-end"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(product, idx) in store.hotProduct.products"
-                :key="product.fin_prdt_cd"
-              >
-                <td>{{ idx + 1 }}</td>
-                <td class="no-wrap">{{ product.fin_prdt_nm }}</td>
-                <td class="no-wrap">{{ product.kor_co_nm }}</td>
-                <td class="text-end no-wrap">{{ product.max_after }} %</td>
-                <td class="text-end no-wrap">{{ product.user_count }}명</td>
-                <td class="text-end"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="col-7">
-          <div class="card custom-card">
-            <div class="card-header fw-bold">금리 비교</div>
-            <!-- <h3>가입한 상품 금리</h3> -->
-            <img
-              :src="'data:image/png;base64,' + store.hotProduct.chart"
-              alt="chart"
-              class="card-body"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    <Hotproduct />
   </div>
 </template>
 
@@ -108,6 +62,7 @@ import { ref, onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import axios from "axios";
 import { useBankStore } from "@/stores/saving";
+import Hotproduct from "@/components/Hotproduct.vue";
 
 const userStore = useUserStore();
 const store = useBankStore();
@@ -184,24 +139,5 @@ console.log(userStore.myProduct);
 }
 .control-btn {
   width: 50px;
-}
-.card {
-  border: 1px solid #ddd;
-}
-.card-header {
-  background-color: #f7f7f7;
-}
-.card-body {
-  background-color: #fff;
-}
-.card-footer {
-  background-color: #f7f7f7;
-}
-table {
-  height: 100%;
-}
-.no-wrap {
-  /* font-size: 12px; Adjust the size as necessary */
-  white-space: nowrap;
 }
 </style>

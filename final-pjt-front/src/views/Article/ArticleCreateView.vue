@@ -69,7 +69,7 @@ const goToBack = function () {
 <style scoped>
 .create-box {
   max-width: 600px;
-  height: 500px;
+  height: 600px;
   margin: 0 auto;
   padding: 20px;
   background-color: #f9f9f9;

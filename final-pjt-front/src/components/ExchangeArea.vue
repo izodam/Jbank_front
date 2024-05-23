@@ -65,9 +65,9 @@ const props = defineProps({
 const exchange = props.exchange;
 import { ref } from "vue";
 
-const beforeCountry = ref("한국");
+const beforeCountry = ref("미국");
 const beforeAmount = ref(null);
-const afterCountry = ref("미국");
+const afterCountry = ref("한국");
 const afterAmount = ref(0);
 const currency = ref("");
 const beforeCurrency = ref("");

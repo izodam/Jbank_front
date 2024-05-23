@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-3">
-    <div v-if="userStore.myProduct.user.nickname">
+    <div v-if="userStore.myProduct.user.nickname && store.recommendProduct">
       <p class="mb-1">
         {{ userInfo.age }}세, 연봉
         {{ userInfo.salary.toLocaleString("ko-KR") }}원, 자산
@@ -10,67 +10,73 @@
         <strong class="name">{{ userInfo.nickname }}</strong
         >님의 추천 상품
       </h2>
-      <div class="best mt-4">
-        <h5>비슷한 사람들은, 이러한 상품을 많이 가입했어요!</h5>
-        <div class="row mt-3">
-          <div
-            v-for="item in store.recommendProduct.data1"
-            class="col-12 col-md-4 mb-4"
-          >
-            <div class="card item-card w-100">
-              <div class="card-body">
-                <h5 class="card-title">{{ item.fin_prdt_nm }}</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">
-                  {{ item.kor_co_nm }}
-                </h6>
-                <p class="card-text">최고 우대 금리 : {{ item.max_rate }}%</p>
-                <button
-                  class="btn btn-secondary join-btn"
-                  @click="changeJoin(item.fin_prdt_cd, item.prdt_type)"
-                  v-if="!item.is_joined"
-                >
-                  가입하기
-                </button>
-                <button
-                  class="btn btn-secondary cancle-btn"
-                  @click="changeCancle(item.fin_prdt_cd, item.prdt_type)"
-                  v-else
-                >
-                  가입취소
-                </button>
+      <div v-if="store.recommendProduct === null" class="mt-4">
+        <h5>회원님과 비슷한 유저가 없네요...</h5>
+        <p>AI에게 추천 받으실래요?</p>
+      </div>
+      <div v-else>
+        <div class="best mt-4">
+          <h5>비슷한 사람들은, 이러한 상품을 많이 가입했어요!</h5>
+          <div class="row mt-3">
+            <div
+              v-for="item in store.recommendProduct.data1"
+              class="col-12 col-md-4 mb-4"
+            >
+              <div class="card item-card w-100">
+                <div class="card-body">
+                  <h5 class="card-title">{{ item.fin_prdt_nm }}</h5>
+                  <h6 class="card-subtitle mb-2 text-body-secondary">
+                    {{ item.kor_co_nm }}
+                  </h6>
+                  <p class="card-text">최고 우대 금리 : {{ item.max_rate }}%</p>
+                  <button
+                    class="btn btn-secondary join-btn"
+                    @click="changeJoin(item.fin_prdt_cd, item.prdt_type)"
+                    v-if="!item.is_joined"
+                  >
+                    가입하기
+                  </button>
+                  <button
+                    class="btn btn-secondary cancle-btn"
+                    @click="changeCancle(item.fin_prdt_cd, item.prdt_type)"
+                    v-else
+                  >
+                    가입취소
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="max-rate mt-4">
-        <h5>회원님에게 추천하는 금리가 높은 상품들이에요!</h5>
-        <div class="row mt-3">
-          <div
-            v-for="item in store.recommendProduct.data2"
-            class="col-12 col-md-4 mb-4"
-          >
-            <div class="card item-card w-100">
-              <div class="card-body">
-                <h5 class="card-title">{{ item.fin_prdt_nm }}</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">
-                  {{ item.kor_co_nm }}
-                </h6>
-                <p class="card-text">최고 우대 금리 : {{ item.max_rate }}%</p>
-                <button
-                  class="btn btn-secondary join-btn"
-                  @click="changeJoin(item.fin_prdt_cd, item.prdt_type)"
-                  v-if="!item.is_joined"
-                >
-                  가입하기
-                </button>
-                <button
-                  class="btn btn-secondary cancle-btn"
-                  @click="changeCancle(item.fin_prdt_cd, item.prdt_type)"
-                  v-else
-                >
-                  가입취소
-                </button>
+        <div class="max-rate mt-4">
+          <h5>회원님에게 추천하는 금리가 높은 상품들이에요!</h5>
+          <div class="row mt-3">
+            <div
+              v-for="item in store.recommendProduct.data2"
+              class="col-12 col-md-4 mb-4"
+            >
+              <div class="card item-card w-100">
+                <div class="card-body">
+                  <h5 class="card-title">{{ item.fin_prdt_nm }}</h5>
+                  <h6 class="card-subtitle mb-2 text-body-secondary">
+                    {{ item.kor_co_nm }}
+                  </h6>
+                  <p class="card-text">최고 우대 금리 : {{ item.max_rate }}%</p>
+                  <button
+                    class="btn btn-secondary join-btn"
+                    @click="changeJoin(item.fin_prdt_cd, item.prdt_type)"
+                    v-if="!item.is_joined"
+                  >
+                    가입하기
+                  </button>
+                  <button
+                    class="btn btn-secondary cancle-btn"
+                    @click="changeCancle(item.fin_prdt_cd, item.prdt_type)"
+                    v-else
+                  >
+                    가입취소
+                  </button>
+                </div>
               </div>
             </div>
           </div>

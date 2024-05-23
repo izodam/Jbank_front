@@ -92,7 +92,7 @@ export const useBankStore = defineStore(
         .catch((err) => console.log(err));
     };
 
-    const recommendProduct = ref();
+    const recommendProduct = ref(null);
 
     const findRecommendProduct = function (token) {
       axios({
@@ -101,9 +101,13 @@ export const useBankStore = defineStore(
         headers: {
           Authorization: `Token ${token}`,
         },
-      }).then((res) => {
-        recommendProduct.value = res.data;
-      });
+      })
+        .then((res) => {
+          recommendProduct.value = res.data;
+        })
+        .catch((err) => {
+          recommendProduct.value = null;
+        });
     };
     return {
       money,
