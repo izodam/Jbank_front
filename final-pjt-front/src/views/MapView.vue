@@ -79,7 +79,7 @@
         :class="['col-md-9', 'content-wrapper', { expanded: isSearchFormOpen }]"
       >
         <div class="row">
-          <div class="col-md-8 col-xl-9">
+          <div class="col-md-8 col-xl-9 position-relative">
             <KakaoMap
               :lat="37.566826"
               :lng="126.9786567"
@@ -92,11 +92,23 @@
                 :key="index"
                 :lat="marker.lat"
                 :lng="marker.lng"
-                :infoWindow="marker.infoWindow"
                 :clickable="true"
                 @onClickKakaoMapMarker="() => onClickMapMarker(marker)"
               />
             </KakaoMap>
+            <div
+              v-if="selectedMarker"
+              class="overlay-container"
+              :style="{
+                top: selectedMarker.overlayPosition.top + 'px',
+                left: selectedMarker.overlayPosition.left + 'px',
+              }"
+            >
+              <div class="overlay-content">
+                <h5>{{ selectedMarker.infoWindow.content }}</h5>
+                <p>{{ selectedMarker.address }}</p>
+              </div>
+            </div>
           </div>
           <div class="col-md-4 col-xl-3">
             <div
@@ -377,8 +389,6 @@ const regions = {
   제주특별자치도: ["제주시", "서귀포시"],
 };
 
-const banks = ["국민은행", "신한은행", "우리은행", "하나은행", "농협은행"];
-
 const map = ref(null);
 const markerList = ref([]);
 const selectedProvince = ref("");
@@ -414,6 +424,10 @@ const placesSearchCB = (data, status) => {
           visible: false,
         },
         address: place.road_address_name || place.address_name,
+        overlayPosition: {
+          top: 0,
+          left: 0,
+        },
       };
       markerList.value.push(marker);
       bounds.extend(new kakao.maps.LatLng(Number(place.y), Number(place.x)));
@@ -434,6 +448,13 @@ const highlightMarker = (marker) => {
   // 새로 선택된 마커의 오버레이를 표시합니다.
   marker.infoWindow.visible = true;
   selectedMarker.value = marker;
+
+  const mapContainer = document.querySelector(".col-md-8");
+  const mapBounds = mapContainer.getBoundingClientRect();
+  const overlayTop = mapBounds.height / 2 - 100;
+  const overlayLeft = mapBounds.width / 2 - 75;
+  marker.overlayPosition.top = overlayTop;
+  marker.overlayPosition.left = overlayLeft;
 
   // 선택된 마커 위치로 지도를 이동합니다.
   map.value.setCenter(new kakao.maps.LatLng(marker.lat, marker.lng));
@@ -527,5 +548,30 @@ const toggleSearchForm = () => {
   background-color: #6a7987;
   border-color: #6a7987;
   /* color: black; */
+}
+
+.overlay-container {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.overlay-content {
+  text-align: center;
+}
+
+.overlay-content h5 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.overlay-content p {
+  font-size: 12px;
+  color: #555;
+  margin: 0;
 }
 </style>

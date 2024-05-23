@@ -96,6 +96,7 @@ export const useUserStore = defineStore(
         url: `${API_URL}/accounts/logout/`,
       })
         .then((res) => {
+          nowUserName.value = "";
           console.log("로그아웃 완료");
           console.log(res.data);
           token.value = null;

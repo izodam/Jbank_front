@@ -4,7 +4,7 @@
       {{ userStore.myProduct.user.nickname }}님, 반갑습니다!
     </h3>
     <h3 v-else>Unknown 님!</h3>
-    <div class="card mt-4">
+    <div class="card custom-card mt-4">
       <div class="card-body">
         <div class="row me-2">
           <div class="col-11">
@@ -28,6 +28,24 @@
           연봉 : {{ userStore.myProduct.user.salary.toLocaleString("ko-KR") }}
         </p>
         <p v-else>연봉 :</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card mt-4 col-md-6 link-card" @click="goToRecommend">
+        <div class="card-body p-4">
+          <h5 class="title">나에게 가장 잘 맞는 상품은?</h5>
+          <div class="copy1">
+            <div>상품 추천 받으러 가기</div>
+          </div>
+        </div>
+      </div>
+      <div class="card mt-4 col-md-6 link-card" @click="goToMyProduct">
+        <div class="card-body p-4">
+          <h5 class="title">내 상품 금리 비교</h5>
+          <div class="copy1">
+            <div>내 가입 상품 보러가기</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -118,8 +136,11 @@ import { useUserStore } from "@/stores/user";
 import { onMounted } from "vue";
 import axios from "axios";
 import { useBankStore } from "@/stores/saving";
+import { useRouter } from "vue-router";
 
 let modal = null;
+
+const router = useRouter();
 
 const bankStore = useBankStore();
 const userStore = useUserStore();
@@ -175,17 +196,21 @@ const updateProfile = () => {
 onMounted(() => {
   userStore.findMyProduct();
 });
+
+const goToRecommend = function () {
+  router.push({ name: "recommend" });
+};
+
+const goToMyProduct = function () {
+  router.push({ name: "mysave" });
+};
 </script>
 
 <style scoped>
 .container {
   max-width: 800px;
 }
-.card-header {
-  background-color: #007bff;
-  color: white;
-}
-.card {
+.custom-card {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -196,5 +221,23 @@ onMounted(() => {
 .modal-header {
   background-color: #2a3b5e;
   color: white;
+}
+
+.row {
+  /* display: flex; */
+  flex-wrap: nowrap; /* Ensure the cards stay on one line */
+  gap: 20px; /* Adjust the gap between the cards */
+}
+
+.link-card {
+  border: 1px solid #ddd;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Add transition for border and box-shadow */
+  flex: 1; /* Ensure the cards take up equal space */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.link-card:hover {
+  border-color: black;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Optional: Add shadow effect on hover */
 }
 </style>

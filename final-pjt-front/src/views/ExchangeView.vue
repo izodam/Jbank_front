@@ -1,11 +1,13 @@
 <template>
   <div class="m-5">
     <!-- <h1>환율 계산 페이지</h1> -->
-    <div v-if="exchange.length !== 0">
+    <div v-if="exchange.length === 0" class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div v-else>
       <ExchangeArea :exchange="exchange" />
       <ExchangeTable :exchange="exchange" />
     </div>
-    <div v-else>loading</div>
   </div>
 </template>
 

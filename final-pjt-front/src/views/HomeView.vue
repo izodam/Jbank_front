@@ -88,7 +88,7 @@ const carouselItems = ref([
   },
   {
     title: "예적금 조회",
-    description: "은행 별 예금과 적금을 금리 순으로 정렬해 비교해줍니다!",
+    description: "은행 별 예금과 적금을 높은 금리 순으로 정렬해 비교해줍니다!",
     buttonLink: "/compareSaving",
     buttonText: "비교해보러 가기",
     buttonColor: "#4F7C95",

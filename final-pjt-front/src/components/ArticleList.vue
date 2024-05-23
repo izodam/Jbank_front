@@ -42,7 +42,14 @@ const userStore = useUserStore();
 const router = useRouter();
 
 const goToDetail = function (id) {
-  router.push({ name: "articleDetail", params: { id: id } });
+  if (userStore.nowUserName === "") {
+    const check = confirm("로그인 후 조회 가능합니다.");
+    if (check) {
+      router.push({ name: "logIn" });
+    }
+  } else {
+    router.push({ name: "articleDetail", params: { id: id } });
+  }
 };
 </script>
 
