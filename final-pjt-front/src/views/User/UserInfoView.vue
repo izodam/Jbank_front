@@ -20,8 +20,14 @@
         <p>이름 : {{ userStore.myProduct.user.nickname }}</p>
         <p>나이 : {{ userStore.myProduct.user.age }}</p>
         <p>Email : {{ userStore.myProduct.user.email }}</p>
-        <p>자산 : {{ userStore.myProduct.user.money }}</p>
-        <p>연봉 : {{ userStore.myProduct.user.salary }}</p>
+        <p v-if="userStore.myProduct.user.money">
+          자산 : {{ userStore.myProduct.user.money.toLocaleString("ko-KR") }}
+        </p>
+        <p v-else>자산 :</p>
+        <p v-if="userStore.myProduct.user.salary">
+          연봉 : {{ userStore.myProduct.user.salary.toLocaleString("ko-KR") }}
+        </p>
+        <p v-else>연봉 :</p>
       </div>
     </div>
 
@@ -111,10 +117,13 @@ import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { onMounted } from "vue";
 import axios from "axios";
+import { useBankStore } from "@/stores/saving";
 
 let modal = null;
 
+const bankStore = useBankStore();
 const userStore = useUserStore();
+
 const form = ref({
   nickname: "",
   age: "",
@@ -152,8 +161,10 @@ const updateProfile = () => {
     },
   })
     .then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       userStore.findMyProduct();
+      bankStore.findRecommendProduct(userStore.token);
+
       if (modal) {
         modal.hide();
       }
@@ -179,11 +190,11 @@ onMounted(() => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .btn-primary {
-  background-color: #1b3074;
+  background-color: #2a3b5e;
   border: none;
 }
 .modal-header {
-  background-color: #1b3074;
+  background-color: #2a3b5e;
   color: white;
 }
 </style>

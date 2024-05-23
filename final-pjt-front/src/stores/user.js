@@ -30,7 +30,7 @@ export const useUserStore = defineStore(
         headers: { Authorization: `Token ${token.value}` },
       })
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           myProduct.value = res.data;
           nowUserName.value = res.data.user.nickname;
           if (nowUserName.value === null) {

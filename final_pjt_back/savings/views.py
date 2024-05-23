@@ -1,3 +1,4 @@
+# savings_views.py
 import requests
 from django.conf import settings
 from rest_framework.response import Response
@@ -165,30 +166,81 @@ def free_saving_options(request, fin_prdt_cd):
     })
 
 
-
 @api_view(['GET'])
 def recommend_products(request):
     if not request.user.is_authenticated:
         return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
-    
+
     user = request.user
     age_range = (user.age - 10, user.age + 10)
-    salary_range = (user.salary - 10000000, user.salary + 10000000)
-    money_range = (user.money - 10000000, user.money + 10000000)
-    
+    salary_range = (user.salary - 5000000, user.salary + 5000000)
+    money_range = (user.money - 100000000, user.money + 100000000)
+
     similar_users = User.objects.filter(
         age__range=age_range,
         salary__range=salary_range,
         money__range=money_range
-    )
-    
-    recommended_products = Product.objects.filter(
+    ).exclude(id=user.id)
+
+    if not similar_users.exists():
+        return Response({"error": "No similar users found"}, status=status.HTTP_404_NOT_FOUND)
+
+    products = Product.objects.filter(
         user__in=similar_users
-    ).annotate(
-        num_users=Count('user')
-    ).order_by('-num_users')[:3]
-    
-    serializer = ProductSerializer(recommended_products, many=True)
+    )
+
+    # 상품 가입 빈도 계산 및 금리 추출
+    product_counts = {}
+    for product in products:
+        if product.fin_prdt_cd not in product_counts:
+            product_counts[product.fin_prdt_cd] = {
+                'count': 0,
+                'product': product,
+                'max_rate': 0,
+                'is_joined': False
+            }
+        product_counts[product.fin_prdt_cd]['count'] += 1
+
+        # 금리 계산
+        if product.prdt_type == 'deposit':
+            deposit_product = DepositProducts.objects.get(fin_prdt_cd=product.fin_prdt_cd)
+            max_rate = max([opt.intr_rate2 for opt in deposit_product.depositoptions_set.all()], default=0.0)
+        elif product.prdt_type == 'saving':
+            saving_product = SavingProducts.objects.get(fin_prdt_cd=product.fin_prdt_cd)
+            max_rate = max([opt.intr_rate2 for opt in saving_product.savingoptions_set.all()], default=0.0)
+        else:
+            max_rate = 0.0
+        
+        product_counts[product.fin_prdt_cd]['max_rate'] = max_rate
+
+        # 가입 여부 확인
+        product_counts[product.fin_prdt_cd]['is_joined'] = Product.objects.filter(user=user, prdt_type=product.prdt_type, fin_prdt_cd=product.fin_prdt_cd).exists()
+
+    # 빈도수를 기준으로 정렬된 상위 3개 상품
+    sorted_by_count = sorted(product_counts.values(), key=lambda x: x['count'], reverse=True)[:3]
+    data1 = []
+    for item in sorted_by_count:
+        product = item['product']
+        serializer = ProductSerializer(product)
+        product_data = serializer.data
+        product_data['count'] = item['count']
+        product_data['max_rate'] = item['max_rate']
+        product_data['is_joined'] = item['is_joined']
+        data1.append(product_data)
+
+    # 금리를 기준으로 정렬된 상위 3개 상품
+    sorted_by_rate = sorted(product_counts.values(), key=lambda x: x['max_rate'], reverse=True)[:3]
+    data2 = []
+    for item in sorted_by_rate:
+        product = item['product']
+        serializer = ProductSerializer(product)
+        product_data = serializer.data
+        product_data['count'] = item['count']
+        product_data['max_rate'] = item['max_rate']
+        product_data['is_joined'] = item['is_joined']
+        data2.append(product_data)
+
     return Response({
-        'data': serializer.data,
+        'data1': data1,
+        'data2': data2,
     })

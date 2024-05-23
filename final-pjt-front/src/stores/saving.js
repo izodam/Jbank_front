@@ -90,6 +90,20 @@ export const useBankStore = defineStore(
         })
         .catch((err) => console.log(err));
     };
+
+    const recommendProduct = ref();
+
+    const findRecommendProduct = function (token) {
+      axios({
+        method: "get",
+        url: `${API_URL}/savings/recommend-products/`,
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }).then((res) => {
+        recommendProduct.value = res.data;
+      });
+    };
     return {
       money,
       API_URL,
@@ -104,9 +118,11 @@ export const useBankStore = defineStore(
       freeSavingNormalList,
       freeSavingDetail,
       bankList,
+      recommendProduct,
       findDetail,
       findSavingDetail,
       findFreeSavingDetail,
+      findRecommendProduct,
     };
   },
   {
