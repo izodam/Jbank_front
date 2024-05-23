@@ -12,8 +12,10 @@ urlpatterns = [
     path('saving-products/', views.saving_products),                                # 전체정보 json 반환
     path('saving-bank/<str:fin_co_no>/', views.saving_bank),                        # 은행정보 json 반환
     path('saving-options/<str:fin_prdt_cd>/', views.saving_options),                # 상세정보 json 반환
-     # 자유적금
+    # 자유적금
     path('free-saving-products/', views.free_saving_products),                      # 전체정보 json 반환
     path('free-saving-bank/<str:fin_co_no>/', views.free_saving_bank),              # 은행정보 json 반환
     path('free-saving-options/<str:fin_prdt_cd>/', views.free_saving_options),      # 상세정보 json 반환
+    # 상품추천
+    path('recommend-products/', views.recommend_products),                          # 추천상품 json 반환
 ]

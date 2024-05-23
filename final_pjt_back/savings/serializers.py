@@ -129,3 +129,11 @@ class SavingProductsSerializer2(serializers.ModelSerializer):
     class Meta:
         model = SavingProducts
         fields = '__all__'
+
+
+from accounts.models import Product
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'

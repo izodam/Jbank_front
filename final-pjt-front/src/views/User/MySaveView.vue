@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-5">
     <h1 class="text-center mb-4" v-if="userStore.myProduct">
-      {{ userStore.myProduct.user.username }}님의 가입 상품
+      {{ userStore.nowUserName }}님의 가입 상품
     </h1>
     <table
       v-if="userStore.myProduct.products.length !== 0"

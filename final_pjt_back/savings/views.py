@@ -4,11 +4,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from .serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer
-from .serializers import DepositProductsSerializer2, SavingProductsSerializer2
+from .serializers import DepositProductsSerializer2, SavingProductsSerializer2, ProductSerializer
 from .models import DepositProducts, SavingProducts
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from accounts.models import Product
+from django.db.models import Count
 
 User = get_user_model()
 
@@ -163,3 +164,31 @@ def free_saving_options(request, fin_prdt_cd):
         'isjoined': is_joined
     })
 
+
+
+@api_view(['GET'])
+def recommend_products(request):
+    if not request.user.is_authenticated:
+        return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    user = request.user
+    age_range = (user.age - 10, user.age + 10)
+    salary_range = (user.salary - 10000000, user.salary + 10000000)
+    money_range = (user.money - 10000000, user.money + 10000000)
+    
+    similar_users = User.objects.filter(
+        age__range=age_range,
+        salary__range=salary_range,
+        money__range=money_range
+    )
+    
+    recommended_products = Product.objects.filter(
+        user__in=similar_users
+    ).annotate(
+        num_users=Count('user')
+    ).order_by('-num_users')[:3]
+    
+    serializer = ProductSerializer(recommended_products, many=True)
+    return Response({
+        'data': serializer.data,
+    })
