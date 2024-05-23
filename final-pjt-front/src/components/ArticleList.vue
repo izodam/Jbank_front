@@ -1,7 +1,7 @@
 <template>
   <div class="mt-3">
     <div class="mb-3 ms-auto">
-      <button class="btn btn-light write-btn">
+      <button class="btn btn-light write-btn" v-if="userStore.isLogin">
         <RouterLink :to="{ name: 'articleCreate' }"> 글쓰기 </RouterLink>
       </button>
     </div>
@@ -35,8 +35,10 @@
 <script setup>
 import { useArticleStore } from "@/stores/article";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
 
 const store = useArticleStore();
+const userStore = useUserStore();
 const router = useRouter();
 
 const goToDetail = function (id) {

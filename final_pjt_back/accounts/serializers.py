@@ -27,10 +27,11 @@ class UserSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     max_before = serializers.SerializerMethodField()
     max_after = serializers.SerializerMethodField()
+    user_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
-        fields = ['user', 'prdt_type', 'fin_prdt_cd', 'fin_prdt_nm', 'kor_co_nm', 'max_before', 'max_after']
+        fields = ['user', 'prdt_type', 'fin_prdt_cd', 'fin_prdt_nm', 'kor_co_nm', 'max_before', 'max_after', 'user_count']
 
     def get_max_before(self, obj):
         if obj.prdt_type == 'deposit':
@@ -49,6 +50,9 @@ class ProductSerializer(serializers.ModelSerializer):
             product = SavingProducts.objects.get(fin_prdt_cd=obj.fin_prdt_cd)
             return max([opt.intr_rate2 for opt in product.savingoptions_set.all()], default=0.0)
         return 0.0
+    
+    def get_user_count(self, obj):
+        return Product.objects.filter(fin_prdt_cd=obj.fin_prdt_cd).count()
 
 def generate_combined_chart(products):
     labels = []

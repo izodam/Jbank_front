@@ -1,3 +1,4 @@
+# savings_models.py
 # 금융회사 API 상세 링크
 # https://finlife.fss.or.kr/finlife/api/fncCoApi/list.do?menuNo=700051
 

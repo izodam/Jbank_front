@@ -19,6 +19,7 @@ export const useBankStore = defineStore(
     const freeSavingList = ref([]);
     const freeSavingNormalList = ref([]);
     const freeSavingDetail = ref([]);
+    const hotProduct = ref(null);
 
     const bankList = ref([
       { fin_co_no: "", kor_co_nm: "전체보기" },
@@ -119,6 +120,7 @@ export const useBankStore = defineStore(
       freeSavingDetail,
       bankList,
       recommendProduct,
+      hotProduct,
       findDetail,
       findSavingDetail,
       findFreeSavingDetail,

@@ -5,13 +5,22 @@
     </button>
     <div class="header" v-if="store.articleDetail.length !== 0">
       <h3>{{ store.articleDetail.article.title }}</h3>
-      <button
-        v-if="store.articleDetail.article.nickname == userStore.nowUserName"
-        @click="updateArticle"
-        class="btn btn-primary update-btn"
-      >
-        수정하기
-      </button>
+      <div>
+        <button
+          v-if="store.articleDetail.article.nickname == userStore.nowUserName"
+          @click="updateArticle"
+          class="btn btn-primary update-btn me-2"
+        >
+          수정하기
+        </button>
+        <button
+          v-if="store.articleDetail.article.nickname == userStore.nowUserName"
+          @click="deleteArticle"
+          class="btn btn-primary update-btn"
+        >
+          삭제하기
+        </button>
+      </div>
     </div>
     <div v-if="store.articleDetail.length !== 0" class="article-details pt-0">
       <p class="meta">
@@ -175,6 +184,21 @@ const toggleOptions = function (id) {
 };
 const goToBack = function () {
   router.push({ name: "article" });
+};
+
+const deleteArticle = function () {
+  axios({
+    method: "delete",
+    url: `${userStore.API_URL}/api/v1/articles/${route.params.id}/`,
+    headers: {
+      Authorization: `Token ${userStore.token}`,
+    },
+  })
+    .then((res) => {
+      console.log("삭제 완료");
+      router.push({ name: "article" });
+    })
+    .catch((err) => console.log(err));
 };
 
 onMounted(() => {

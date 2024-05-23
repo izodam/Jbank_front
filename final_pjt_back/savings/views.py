@@ -173,14 +173,16 @@ def recommend_products(request):
 
     user = request.user
     age_range = (user.age - 10, user.age + 10)
-    salary_range = (user.salary - 5000000, user.salary + 5000000)
-    money_range = (user.money - 100000000, user.money + 100000000)
+    salary_range = (user.salary - 10000000, user.salary + 10000000)
+    money_range = (user.money - 10000000, user.money + 10000000)
 
     similar_users = User.objects.filter(
         age__range=age_range,
         salary__range=salary_range,
         money__range=money_range
     ).exclude(id=user.id)
+
+    print(similar_users)
 
     if not similar_users.exists():
         return Response({"error": "No similar users found"}, status=status.HTTP_404_NOT_FOUND)

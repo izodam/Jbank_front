@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from .models import Product
 from .serializers import UserSerializer, ProductSerializer, generate_combined_chart
 from savings.models import DepositProducts, SavingProducts
+from django.db.models import Count
 
 User = get_user_model()
 
@@ -59,7 +60,7 @@ def user_profile(request):
     user = request.user
     if not user.is_authenticated:
         return Response({'detail': 'Authentication required or access denied.'}, status=status.HTTP_401_UNAUTHORIZED)
-
+    
     products = Product.objects.filter(user=user)
     product_serializer = ProductSerializer(products, many=True)
     user_serializer = UserSerializer(user)
@@ -85,3 +86,19 @@ def update(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+@api_view(['GET'])
+def hot_products(request):
+    # 가장 많은 유저가 가입한 상품 10개를 가져옴
+    products = Product.objects.annotate(user_count=Count('user')).order_by('-user_count')[:5]
+
+    # 시리얼라이저를 사용하여 데이터 직렬화
+    serializer = ProductSerializer(products, many=True)
+    data = serializer.data
+    sorted_data = sorted(data, key=lambda x: x['user_count'], reverse=True)
+
+    # 차트를 생성하여 이미지로 변환
+    chart = generate_combined_chart(sorted_data)
+
+    return Response({'products': sorted_data, 'chart': chart})
